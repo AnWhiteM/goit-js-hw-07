@@ -1,9 +1,8 @@
 import { galleryItems } from "./gallery-items.js";
-// import * as basicLightbox from "basiclightbox";
 
 document.addEventListener("DOMContentLoaded", function () {
-  // 1. Створення і рендер розмітки на підставі масиву даних
   const galleryContainer = document.getElementById("gallery");
+  let modalInstance = null;
 
   function renderGallery(items) {
     items.forEach((item) => {
@@ -18,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
       image.classList.add("gallery__image");
       image.src = item.preview;
       image.alt = item.description;
-      // Посилання на оригінальне зображення в data-атрибуті source
+
       image.setAttribute("data-source", item.original);
 
       link.appendChild(image);
@@ -29,33 +28,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   renderGallery(galleryItems);
 
-  // 2. Реалізація делегування на ul.gallery і отримання url великого зображення
   galleryContainer.addEventListener("click", function (event) {
     event.preventDefault();
 
     if (event.target.classList.contains("gallery__image")) {
       const imageUrl = event.target.dataset.source;
 
-      // 3. Відкриття модального вікна
-      const modal = basicLightbox.create(`
+      modalInstance = basicLightbox.create(`
                 <img width="800" height="600" src="${imageUrl}">
             `);
+      modalInstance.show();
 
-      modal.show();
-
-      // 4. Заміна значення атрибута src елемента <img> в модальному вікні перед відкриттям
-      modal.element().addEventListener("click", function () {
-        modal.close();
+      modalInstance.element().addEventListener("click", function () {
+        modalInstance.close();
       });
     }
   });
-
-  // Наступний функціонал для закриття модального вікна по клавіші Escape (не обов'язковий)
   document.addEventListener("keydown", function (event) {
-    const modal = basicLightbox.instance();
-
-    if (modal && event.key === "Escape") {
-      modal.close();
+    if (modalInstance && event.key === "Escape") {
+      modalInstance.close();
     }
   });
 });
