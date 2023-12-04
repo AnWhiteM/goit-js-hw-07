@@ -1,8 +1,7 @@
 import { galleryItems } from "./gallery-items.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-  const galleryContainer = document.getElementById("gallery");
-  let modalInstance = null;
+  let modalInstance;
 
   const galleryElement = document.getElementById("gallery");
 
@@ -25,22 +24,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
   galleryElement.innerHTML = galleryHTML;
 
-  galleryElement.addEventListener("click", function (event) {
+  function openModal(imageUrl) {
+    modalInstance = basicLightbox.create(`
+    <img width="800" height="600" src="${imageUrl}" alt="Image_description">
+  `);
+    modalInstance.show();
+  }
+
+  function closeModal() {
+    if (modalInstance) {
+      modalInstance.close();
+    }
+  }
+
+  function handleImageClick(event) {
     event.preventDefault();
 
     if (event.target.nodeName === "IMG") {
       const imageUrl = event.target.dataset.source;
-
-      modalInstance = basicLightbox.create(`
-        <img width="800" height="600" src="${imageUrl}" alt = "Image_descritpion">
-      `);
-      modalInstance.show();
+      openModal(imageUrl);
     }
-  });
+  }
 
-  document.addEventListener("keydown", function (event) {
+  function handleKeyDown(event) {
     if (modalInstance && event.key === "Escape") {
-      modalInstance.close();
+      closeModal();
     }
-  });
+  }
+
+  galleryElement.addEventListener("click", handleImageClick);
+
+  document.addEventListener("keydown", handleKeyDown);
 });
