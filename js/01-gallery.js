@@ -4,46 +4,40 @@ document.addEventListener("DOMContentLoaded", function () {
   const galleryContainer = document.getElementById("gallery");
   let modalInstance = null;
 
-  function renderGallery(items) {
-    items.forEach((item) => {
-      const galleryItem = document.createElement("li");
-      galleryItem.classList.add("gallery__item");
+  const galleryElement = document.getElementById("gallery");
 
-      const link = document.createElement("a");
-      link.classList.add("gallery__link");
-      link.href = item.original;
+  const galleryHTML = galleryItems
+    .map(
+      (item) => `
+    <li class="gallery__item">
+      <a class="gallery__link" href="${item.original}">
+        <img
+          class="gallery__image"
+          src="${item.preview}"
+          data-source="${item.original}"
+          alt="${item.description}"
+        />
+      </a>
+    </li>
+  `
+    )
+    .join("");
 
-      const image = document.createElement("img");
-      image.classList.add("gallery__image");
-      image.src = item.preview;
-      image.alt = item.description;
+  galleryElement.innerHTML = galleryHTML;
 
-      image.setAttribute("data-source", item.original);
-
-      link.appendChild(image);
-      galleryItem.appendChild(link);
-      galleryContainer.appendChild(galleryItem);
-    });
-  }
-
-  renderGallery(galleryItems);
-
-  galleryContainer.addEventListener("click", function (event) {
+  galleryElement.addEventListener("click", function (event) {
     event.preventDefault();
 
-    if (event.target.classList.contains("gallery__image")) {
+    if (event.target.nodeName === "IMG") {
       const imageUrl = event.target.dataset.source;
 
       modalInstance = basicLightbox.create(`
-                <img width="800" height="600" src="${imageUrl}">
-            `);
+        <img width="800" height="600" src="${imageUrl}" alt = "Image_descritpion">
+      `);
       modalInstance.show();
-
-      modalInstance.element().addEventListener("click", function () {
-        modalInstance.close();
-      });
     }
   });
+
   document.addEventListener("keydown", function (event) {
     if (modalInstance && event.key === "Escape") {
       modalInstance.close();
