@@ -49,6 +49,9 @@ document.addEventListener("DOMContentLoaded", function () {
   function handleKeyDown(event) {
     if (modalInstance && event.key === "Escape") {
       closeModal();
+
+      galleryElement.removeEventListener;
+      "click", handleImageClick;
     }
   }
 
