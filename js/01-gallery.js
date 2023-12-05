@@ -50,8 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (modalInstance && event.key === "Escape") {
       closeModal();
 
-      galleryElement.removeEventListener;
-      "click", handleImageClick;
+      galleryElement.removeEventListener("click", handleImageClick);
     }
   }
 
